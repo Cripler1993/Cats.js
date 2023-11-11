@@ -13,3 +13,12 @@ function addCat(obj) {
     body: JSON.stringify(obj),
   });
 }
+
+function deleteCat(id) {
+  return fetch(`${url}/delete/${id}`, {
+    method: "DELETE",
+  });
+}
+function getCatDescription(id) {
+  return fetch(`${url}/show/${id}`);
+}
