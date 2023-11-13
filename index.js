@@ -15,25 +15,21 @@ const $catDesc = document.querySelector(".cat__disc");
 const $catRate = document.querySelector("#rate");
 const $catLike = document.querySelector(".like");
 
-const $nameInput = document.querySelector("#exampleInputEmail1");
+const $editForm = document.querySelector(".edit__form");
 
 $addBtn.addEventListener("click", function () {
   $modalAdd.classList.remove("hidden");
 });
-
-$addForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  console.log(event);
-  let id = $addForm.id.value;
-  let name = $addForm.name.value;
-  let description = $addForm.description.value;
-  let image = $addForm.image.value;
-  let age = $addForm.age.value;
-  let rate = $addForm.rate.value;
-  let favorite = $addForm.favorite.checked;
+function handleSubmit(form, func) {
+  let id = form.id.value;
+  let name = form.name.value;
+  let description = form.description.value;
+  let image = form.image.value;
+  let age = form.age.value;
+  let rate = form.rate.value;
+  let favorite = form.favorite.checked;
   let obj = { id, name, description, image, age, rate, favorite };
-  console.log(obj);
-  addCat(obj)
+  func(obj)
     .then(function (response) {
       return response.json();
     })
@@ -42,6 +38,15 @@ $addForm.addEventListener("submit", function (event) {
       closeAllModals();
       renderAllCats();
     });
+}
+$addForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  handleSubmit($addForm, addCat);
+});
+
+$editForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  handleSubmit($editForm, updateCat);
 });
 
 $modalClose.forEach(function (elem) {
@@ -60,7 +65,6 @@ $container.addEventListener("click", function (event) {
         return response.json();
       })
       .then(function (data) {
-        console.log(data);
         $modalInfo.classList.remove("hidden");
         $catImg.src = data.image;
         $catName.innerHTML = data.name;
@@ -87,10 +91,14 @@ $container.addEventListener("click", function (event) {
         return response.json();
       })
       .then(function (data) {
-        console.log(data);
         $modalEdit.classList.remove("hidden");
-        // $nameInput.value = data.name;
-        console.log($nameInput.value);
+        $editForm.id.value = data.id;
+        $editForm.name.value = data.name;
+        $editForm.description.value = data.description;
+        $editForm.image.value = data.image;
+        $editForm.age.value = data.age;
+        $editForm.rate.value = data.rate;
+        $editForm.favorite.checked = data.favorite;
       });
   }
 });

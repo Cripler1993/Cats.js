@@ -100,3 +100,7 @@ input.name {
 input.id {
   display: none;
 }
+.card-img-top {
+  height: 300px;
+  object-fit: cover;
+}
